@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Sharing Platform</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+                        url('images/pexels-ella-olsson-572949-1640774.jpg') no-repeat center center/cover; /* Local background image */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #d4af37; /* Gold */
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.9), rgba(255, 215, 0, 0.9)); /* Semi-transparent gold gradient */
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: rgba(212, 175, 55, 0.9); /* Semi-transparent gold */
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #2c3e50; /* Dark blue */
+        }
+
+        .featured-recipes {
+            padding: 20px;
+            margin: 20px;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .featured-recipes h2 {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Horizontal grid layout */
+            gap: 20px;
+        }
+
+        .recipe-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .recipe-card div {
+            padding: 15px;
+        }
+
+        .recipe-card h3 {
+            margin: 0;
+            color: #d4af37; /* Gold */
+            font-size: 1.3rem;
+        }
+
+        .recipe-card p {
+            margin: 10px 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .recipe-card button {
+            background: #d4af37; /* Gold */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .recipe-card button:hover {
+            background: #b8860b; /* Darker gold */
+        }
+
+        footer {
+            background: rgba(212, 175, 55, 0.9); /* Semi-transparent gold */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        footer a {
+            color: #2c3e50; /* Dark blue */
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        .contact-info {
+            margin-top: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #d4af37; /* Gold */
+        }
+
+        .modal-content ul, .modal-content ol {
+            text-align: left;
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .modal-content ul li, .modal-content ol li {
+            margin: 5px 0;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #d4af37; /* Gold */
+        }
+
+        .close:hover {
+            color: #b8860b; /* Darker gold */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Recipe Sharing Platform</h1>
+        <p>Share and discover new recipes!</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="share-recipe.html">Share Recipe</a>
+        <a href="login.html">Login</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <section class="featured-recipes">
+        <h2>Featured Recipes</h2>
+        <div class="recipe-grid">
+            <!-- Recipe Cards -->
+            <div class="recipe-card">
+                <img src="images/spaghetti-carbonara.jpg" alt="Spaghetti Carbonara">
+                <div>
+                    <h3>Classic Spaghetti Carbonara</h3>
+                    <p><strong>Ingredients:</strong> Spaghetti, eggs, Parmesan cheese, pancetta, garlic, black pepper.</p>
+                    <p><strong>Instructions:</strong> Cook spaghetti, mix with beaten eggs and cheese, add cooked pancetta, and season with pepper.</p>
+                    <button onclick="openModal('carbonara')">View Recipe</button>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="images/chocolate-lava-cake.jpg" alt="Chocolate Lava Cake">
+                <div>
+                    <h3>Chocolate Lava Cake</h3>
+                    <p><strong>Ingredients:</strong> Dark chocolate, butter, sugar, eggs, flour.</p>
+                    <p><strong>Instructions:</strong> Melt chocolate and butter, mix with sugar and eggs, bake until the edges are set but the center is still soft.</p>
+                    <button onclick="openModal('lava-cake')">View Recipe</button>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="images/kerala-sadhya.jpg" alt="Kerala Sadya">
+                <div>
+                    <h3>Kerala Sadya</h3>
+                    <p><strong>Ingredients:</strong> Rice, sambar, avial, thoran, olan, payasam, banana, papadum.</p>
+                    <p><strong>Instructions:</strong> Serve a variety of traditional Kerala dishes on a banana leaf.</p>
+                    <button onclick="openModal('kerala-sadhya')">View Recipe</button>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="images/kerala-parotta.jpg" alt="Kerala Parotta">
+                <div>
+                    <h3>Kerala Parotta</h3>
+                    <p><strong>Ingredients:</strong> Maida (all-purpose flour), egg, oil, salt, water.</p>
+                    <p><strong>Instructions:</strong> Knead dough, layer and roll into parottas, cook on a hot griddle with oil.</p>
+                    <button onclick="openModal('kerala-parotta')">View Recipe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals for Detailed Recipes -->
+    <!-- Spaghetti Carbonara Modal -->
+    <div id="carbonara-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('carbonara-modal')">&times;</span>
+            <h2>Classic Spaghetti Carbonara</h2>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+                <li>400g spaghetti</li>
+                <li>4 large eggs</li>
+                <li>1 cup grated Parmesan cheese</li>
+                <li>200g pancetta, diced</li>
+                <li>2 cloves garlic, minced</li>
+                <li>Freshly ground black pepper</li>
+                <li>Salt to taste</li>
+            </ul>
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Cook spaghetti in boiling salted water until al dente. Reserve 1 cup of pasta water and drain the rest.</li>
+                <li>In a bowl, whisk together eggs and Parmesan cheese.</li>
+                <li>In a pan, cook pancetta and garlic until crispy. Add cooked spaghetti and toss to combine.</li>
+                <li>Remove from heat and quickly mix in the egg and cheese mixture. Add reserved pasta water as needed to create a creamy sauce.</li>
+                <li>Season with black pepper and serve immediately.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Chocolate Lava Cake Modal -->
+    <div id="lava-cake-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('lava-cake-modal')">&times;</span>
+            <h2>Chocolate Lava Cake</h2>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+                <li>200g dark chocolate</li>
+                <li>200g unsalted butter</li>
+                <li>200g sugar</li>
+                <li>4 eggs</li>
+                <li>100g all-purpose flour</li>
+            </ul>
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Preheat the oven to 220°C (425°F). Grease and flour ramekins.</li>
+                <li>Melt chocolate and butter together in a double boiler.</li>
+                <li>In a separate bowl, whisk sugar and eggs until light and fluffy.</li>
+                <li>Combine the chocolate mixture with the egg mixture, then fold in the flour.</li>
+                <li>Pour the batter into the ramekins and bake for 10-12 minutes until the edges are set but the center is still soft.</li>
+                <li>Serve warm with ice cream or whipped cream.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Kerala Sadya Modal -->
+    <div id="kerala-sadhya-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('kerala-sadhya-modal')">&times;</span>
+            <h2>Kerala Sadya</h2>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+                <li>2 cups rice</li>
+                <li>1 cup sambar</li>
+                <li>1 cup avial (mixed vegetables in coconut gravy)</li>
+                <li>1 cup thoran (stir-fried vegetables)</li>
+                <li>1 cup olan (ash gourd and beans in coconut milk)</li>
+                <li>1 cup payasam (sweet dessert)</li>
+                <li>2 bananas</li>
+                <li>4 papadums</li>
+            </ul>
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Cook rice and keep it warm.</li>
+                <li>Prepare sambar, avial, thoran, olan, and payasam.</li>
+                <li>Arrange the dishes on a banana leaf in the traditional order.</li>
+                <li>Serve with bananas and papadums on the side.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Kerala Parotta Modal -->
+    <div id="kerala-parotta-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('kerala-parotta-modal')">&times;</span>
+            <h2>Kerala Parotta</h2>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+                <li>3 cups maida (all-purpose flour)</li>
+                <li>1 egg</li>
+                <li>2 tbsp oil</li>
+                <li>1 tsp salt</li>
+                <li>Water as needed</li>
+            </ul>
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Knead maida, egg, oil, salt, and water into a soft dough. Rest for 30 minutes.</li>
+                <li>Divide the dough into small balls and roll them into thin layers.</li>
+                <li>Apply oil, fold, and roll again to create layers.</li>
+                <li>Cook on a hot griddle with oil until golden brown on both sides.</li>
+                <li>Serve hot with curry or chicken roast.</li>
+            </ol>
+        </div>
+    </div>
+
+    <footer>
+        <div>
+            <a href="https://facebook.com/fakepage" target="_blank">Facebook</a> |
+            <a href="https://instagram.com/fakepage" target="_blank">Instagram</a> |
+            <a href="https://twitter.com/fakepage" target="_blank">Twitter</a>
+        </div>
+        <div class="contact-info">
+            <p>Contact us: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+        </div>
+        <div>
+            <a href="#">About Us</a> |
+            <a href="#">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript to handle modal open/close
+        function openModal(modalId) {
+            document.getElementById(`${modalId}-modal`).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
